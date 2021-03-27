@@ -118,7 +118,11 @@
 	};
 
 	gpu_edp {
+#if defined(CONFIG_TEGRA_GPU_OVERCLOCK)
+		nvidia,edp_limit = <12000>;
+#else
 		nvidia,edp_limit = <11200>;
+#endif
 	};
 
 	udc@7d000000 {
