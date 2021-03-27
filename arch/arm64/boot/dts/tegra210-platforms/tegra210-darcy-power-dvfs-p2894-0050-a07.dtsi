@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2014-2017 NVIDIA CORPORATION. All rights reserved.
+ *
+ * This software is licensed under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation, and
+ * may be copied, distributed, and modified under those terms.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ */
+
+/ {
+	dvfs_rails {
+		cpu_vmin_cdev: vdd-cpu-vmin-cdev@5 {
+			nvidia,trips = <&cpu_vmin1 1130>;
+		};
+
+		cpu_vmax_cdev: vdd-cpu-vmax-cdev@8 {
+			nvidia,trips = <&cpu_vmax1 1170 &cpu_vmax2 1170>;
+		};
+
+	};
+	thermal-zones {
+		/delete-node/ Tdiode_tegra;
+
+		AO-therm {
+			thermal-zone-params {
+				governor-name = "pid_thermal_gov";
+			};
+		};
+
+		AO-therm {
+			SET_MAP_TRIP(cpu, cpu, vmin, 1, 86000);
+		};
+		AO-therm {
+			trips {
+				/* Reference only trip, not mapped */
+				gpu_scaling0: gpu-scaling0 {
+					temperature = <(-25000)>;
+					hysteresis = <0>;
+					type = "active";
+				};
+			};
+			SET_MAP_TRIP(gpu, gpu, scaling, 1, 15000);
+			SET_MAP_TRIP(gpu, gpu, scaling, 2, 30000);
+			SET_MAP_TRIP(gpu, gpu, scaling, 3, 50000);
+			SET_MAP_TRIP(gpu, gpu, scaling, 4, 70000);
+			SET_MAP_TRIP(gpu, gpu, scaling, 5, 105000);
+
+			SET_MAP_TRIP(gpu, gpu, vmax, 1, 85000);
+		};
+		AO-therm {
+			SET_MAP_TRIP(core, core, vmin, 1, 15000);
+			SET_MAP_TRIP(core, core, vmax, 1, 85000);
+		};
+		CPU-therm {
+			trips {
+				cpu_critical {
+					temperature = <86000>;
+				};
+				cpu_heavy {
+					temperature = <84000>;
+				};
+			};
+		};
+		GPU-therm {
+			trips {
+				gpu_critical {
+					temperature = <86000>;
+				};
+				gpu_heavy {
+					temperature = <84000>;
+				};
+			};
+		};
+	};
+};
+
