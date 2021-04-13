@@ -24,7 +24,7 @@
 #endif
 
 #ifndef cpu_relaxed_read_long
-#define cpu_relaxed_read_long(p)	(*(p))
+#define cpu_relaxed_read_long(p)	((*(p)))
 #endif
 
 #endif /*_ASM_GENERIC_RELAXED_H_*/
